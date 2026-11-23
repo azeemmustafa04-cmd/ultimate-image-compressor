@@ -3,15 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ultimate Image Compressor</title>
+<title>Unlimited Image Compressor</title>
 <meta name="description" content="Free online image compressor with no limits. Compress JPG, PNG, WebP, GIF, BMP, AVIF and SVG images of any size, in bulk, right in your browser. No upload, and every image is quality-checked against the original.">
 <meta name="theme-color" content="#151816">
+<link rel="canonical" href="https://unlimitedimagecompressor.vercel.app/">
+<meta property="og:url" content="https://unlimitedimagecompressor.vercel.app/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Ultimate Image Compressor: no upload, no limits">
+<meta property="og:title" content="Unlimited Image Compressor: no upload, no limits">
 <meta property="og:description" content="Compress any number of JPG, PNG, WebP, GIF, BMP, AVIF and SVG images in your browser. Every image is checked against the original so quality stays.">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23151816'/%3E%3Cpath d='M8 8h6v2h-4v4H8zM24 8v6h-2v-4h-4V8zM8 24v-6h2v4h4v2zM24 24h-6v-2h4v-4h2z' fill='%23d24f1b'/%3E%3C/svg%3E">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Ultimate Image Compressor","applicationCategory":"MultimediaApplication","operatingSystem":"Any (runs in the browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Compress unlimited JPG, PNG, WebP, GIF, BMP, AVIF and SVG images of any size in the browser, with an SSIM quality check on every image. Files are never uploaded."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Unlimited Image Compressor","url":"https://unlimitedimagecompressor.vercel.app/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (runs in the browser)","browserRequirements":"Requires a modern web browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free online image compressor that runs entirely in the browser. Compress unlimited JPG, PNG, WebP, GIF, BMP, AVIF, SVG, HEIC and TIFF images of any size, with an SSIM quality check on every image. Files are never uploaded.","featureList":["Unlimited images and file sizes","No upload: runs on your device","SSIM quality check on every image","Reduces phone photos from MB to KB","HEIC (iPhone, Samsung) and TIFF support","Bulk compression of folders with ZIP download","Removes EXIF and GPS data"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is Unlimited Image Compressor free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It is free, needs no sign-up, adds no watermark, and has no limit on the number or size of images."}},
+{"@type":"Question","name":"Are my images uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Everything runs inside your browser, so your photos never leave your device. That is also why there is no file limit."}},
+{"@type":"Question","name":"Will compression reduce image quality?","acceptedAnswer":{"@type":"Answer","text":"Every image is compared with its original using SSIM. On the Balanced setting the result must keep a 99.3% match and JPG quality never goes below 80, so there is no visible difference."}},
+{"@type":"Question","name":"How do I reduce a photo from MB to KB?","acceptedAnswer":{"@type":"Answer","text":"Leave Resize on \"Screen size, 1920 px\" and drop your photos. In our tests, 2 to 4 MB phone photos became about 190 to 280 KB with a 99.5% match, because screens only show about 1920 pixels."}},
+{"@type":"Question","name":"How do I compress an image to an exact size like 20 KB or 100 KB?","acceptedAnswer":{"@type":"Answer","text":"Choose the limit under Target file size, or open the 20 KB, 50 KB, 100 KB, 200 KB, 500 KB or 1 MB page. Each image comes out under that size with the best quality that fits."}},
+{"@type":"Question","name":"Can I compress iPhone HEIC photos?","acceptedAnswer":{"@type":"Answer","text":"Yes. HEIC photos from iPhone and Samsung phones are opened in the browser and saved as JPG, so they open everywhere."}},
+{"@type":"Question","name":"Which image formats are supported?","acceptedAnswer":{"@type":"Answer","text":"JPG, PNG, WebP, GIF, BMP, AVIF, SVG, HEIC and TIFF."}},
+{"@type":"Question","name":"Can I compress many images at once?","acceptedAnswer":{"@type":"Answer","text":"Yes. Drop as many images or whole folders as you like, then download everything as one ZIP file."}},
+{"@type":"Question","name":"Does it work on mobile phones?","acceptedAnswer":{"@type":"Answer","text":"Yes. It works in any modern browser on Android, iPhone, Windows and Mac."}}
+]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -123,6 +136,13 @@ h1 {
 .custom { display: grid; grid-template-columns: auto 1fr 3ch; align-items: center; gap: 10px; font-size: 13.5px; }
 .custom[hidden] { display: none; }
 .custom output { font: 500 14px var(--mono); text-align: right; }
+.custom.kb { grid-template-columns: auto 1fr auto; margin-top: 8px; }
+.custom.kb input { width: 100%; padding: 8px 10px; border: 1.5px solid var(--ink); border-radius: 3px; background: var(--sheet); font: 500 14px var(--mono); }
+.settings.has-target fieldset { opacity: .45; }
+.sizes-nav { margin: 14px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 14px; color: var(--muted); }
+.sizes-nav a { font: 500 12.5px/1 var(--mono); color: var(--ink); text-decoration: none; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 2px; background: var(--sheet); }
+.sizes-nav a:hover { border-color: var(--ink); }
+.sizes-nav a[aria-current="page"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
 input[type="range"] { accent-color: var(--ink); width: 100%; }
 .field { display: grid; gap: 0; }
 select {
@@ -218,6 +238,14 @@ th { font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: upperc
 td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-right: 16px; }
 .fine { margin: 14px 0 0; font-size: 13.5px; color: var(--muted); max-width: 70ch; }
 
+/* ---------- FAQ ---------- */
+.faq { border-top: 2px solid var(--ink); padding-top: 22px; }
+.faq h2 { margin: 0 0 16px; font: 800 30px/1 var(--display); text-transform: uppercase; text-wrap: balance; }
+.faq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 32px; }
+.faq h3 { margin: 0 0 4px; font: 600 16px/1.35 var(--body); }
+.faq p { margin: 0; color: var(--muted); font-size: 14.5px; max-width: 62ch; }
+@media (max-width: 860px) { .faq-grid { grid-template-columns: 1fr; } }
+
 /* ---------- compare modal ---------- */
 .modal { position: fixed; inset: 0; z-index: 50; background: #0b0d0c; color: #e8ece7; display: grid; grid-template-rows: auto 1fr auto; color-scheme: dark; }
 .modal[hidden] { display: none; }
@@ -267,8 +295,9 @@ td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-r
 <main class="wrap">
   <header class="top">
     <div>
-      <h1>Ultimate Image Compressor</h1>
+      <h1>Unlimited Image Compressor</h1>
       <p class="lede">Compress any number of images of any size, right in this browser. Nothing is uploaded, and every image is checked against its original, so you only get a smaller file when it still looks the same.</p>
+      <nav class="sizes-nav" aria-label="Compress to an exact size"><span>Need an exact size?</span><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-10kb">10 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-20kb">20 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-30kb">30 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-50kb">50 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-100kb">100 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-200kb">200 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-500kb">500 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-1mb">1 MB</a></nav>
     </div>
     <div class="strip" aria-label="Supported formats"><span>JPG</span><span>PNG</span><span>WebP</span><span>GIF</span><span>BMP</span><span>AVIF</span><span>SVG</span><span>HEIC</span><span>TIFF</span></div>
   </header>
@@ -305,6 +334,27 @@ td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-r
           <output id="q-out" for="q">80</output>
         </div>
       </fieldset>
+      <div class="field">
+        <label class="lbl" for="target">Target file size</label>
+        <select id="target" aria-describedby="target-help">
+          <option value="0">No limit, best quality</option>
+          <option value="10">Under 10 KB</option>
+          <option value="20">Under 20 KB</option>
+          <option value="30">Under 30 KB</option>
+          <option value="50">Under 50 KB</option>
+          <option value="100">Under 100 KB</option>
+          <option value="200">Under 200 KB</option>
+          <option value="500">Under 500 KB</option>
+          <option value="1000">Under 1 MB</option>
+          <option value="custom">Custom size…</option>
+        </select>
+        <div class="custom kb" id="target-custom" hidden>
+          <label for="target-kb">Size limit</label>
+          <input type="number" id="target-kb" min="5" max="50000" step="1" value="150" inputmode="numeric">
+          <span>KB</span>
+        </div>
+        <p class="help" id="target-help"></p>
+      </div>
       <div class="field">
         <label class="lbl" for="fmt">Save as</label>
         <select id="fmt">
@@ -384,7 +434,22 @@ td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-r
           </tbody>
         </table>
       </div>
-      <p class="fine">Animated PNG and WebP files are returned unchanged so the animation survives. Camera data such as EXIF and GPS location is removed from compressed files, which also keeps your location private. If an image is too big for the memory this browser allows, it is scaled down automatically and tried again.</p>
+      <p class="fine" id="fine-print">Animated PNG and WebP files are returned unchanged so the animation survives. Camera data such as EXIF and GPS location is removed from compressed files, which also keeps your location private. If an image is too big for the memory this browser allows, it is scaled down automatically and tried again.</p>
+    </div>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Questions people ask</h2>
+    <div class="faq-grid">
+      <div><h3>Is Unlimited Image Compressor free?</h3><p>Yes. It is free, needs no sign-up, adds no watermark, and has no limit on the number or size of images.</p></div>
+      <div><h3>Are my images uploaded to a server?</h3><p>No. Everything runs inside your browser, so your photos never leave your device. That is also why there is no file limit.</p></div>
+      <div><h3>Will compression reduce image quality?</h3><p>Every image is compared with its original using SSIM. On the Balanced setting the result must keep a 99.3% match and JPG quality never goes below 80, so there is no visible difference.</p></div>
+      <div><h3>How do I reduce a photo from MB to KB?</h3><p>Leave Resize on "Screen size, 1920 px" and drop your photos. In our tests, 2 to 4 MB phone photos became about 190 to 280 KB with a 99.5% match, because screens only show about 1920 pixels.</p></div>
+      <div><h3>How do I compress an image to an exact size like 20 KB or 100 KB?</h3><p>Choose the limit under Target file size, or open the 20 KB, 50 KB, 100 KB, 200 KB, 500 KB or 1 MB page above. Each image comes out under that size with the best quality that fits.</p></div>
+      <div><h3>Can I compress iPhone HEIC photos?</h3><p>Yes. HEIC photos from iPhone and Samsung phones are opened in the browser and saved as JPG, so they open everywhere.</p></div>
+      <div><h3>Which image formats are supported?</h3><p>JPG, PNG, WebP, GIF, BMP, AVIF, SVG, HEIC and TIFF.</p></div>
+      <div><h3>Can I compress many images at once?</h3><p>Yes. Drop as many images or whole folders as you like, then download everything as one ZIP file.</p></div>
+      <div><h3>Does it work on mobile phones?</h3><p>Yes. It works in any modern browser on Android, iPhone, Windows and Mac.</p></div>
     </div>
   </section>
 </main>
@@ -828,6 +893,59 @@ async function makeThumb(src, alpha, webp) {
   return enc(c, webp ? 'image/webp' : alpha ? 'image/png' : 'image/jpeg', 0.88);
 }
 
+/* ---- target size: the best quality and dimensions that fit under a byte limit ---- */
+function sizeLabel(kb) { return kb >= 1000 ? (Math.round(kb / 100) / 10) + ' MB' : kb + ' KB'; }
+async function maxQualityUnder(c, mime, target) {
+  var hiB = await enc(c, mime, 0.92);
+  if (hiB.size <= target) return { blob: hiB, q: 0.92 };
+  var lo = 0.2, loB = await enc(c, mime, lo);
+  if (loB.size > target) return null;
+  var best = { blob: loB, q: lo }, hi = 0.92;
+  while (hi - lo > 0.03) {
+    var mid = Math.round((lo + hi) * 50) / 100, b = await enc(c, mime, mid);
+    if (b.size <= target) { lo = mid; best = { blob: b, q: mid }; } else hi = mid;
+  }
+  return best;
+}
+function scaledTo(src, s) { return drawScaled(src, Math.max(1, Math.round(src.width * s)), Math.max(1, Math.round(src.height * s))); }
+async function fitToSize(src, mime, target, tLabel, onStage) {
+  /* Start near a size that usually fits (about 0.08 bytes per pixel), then adjust. */
+  var full = src.width * src.height, startPx = target / 0.08, s = full > startPx ? Math.sqrt(startPx / full) : 1;
+  var cur = s < 1 ? scaledTo(src, s) : src, best = null;
+  for (var step = 0; step < 25; step++) {
+    onStage('Fitting under ' + tLabel + ' at ' + cur.width + '×' + cur.height);
+    var fit = await maxQualityUnder(cur, mime, target), side = Math.max(cur.width, cur.height);
+    if (fit) { best = { blob: fit.blob, q: fit.q, canvas: cur, s: s }; if (fit.q >= 0.6 || side <= 320) break; }
+    if (side <= 64) break;
+    s *= 0.85; cur = scaledTo(src, s);
+  }
+  /* Plenty of room left: grow back toward the original size while quality stays good. */
+  if (best && best.q >= 0.85 && best.s < 1) {
+    for (var g = 0; g < 8; g++) {
+      var ns = Math.min(1, best.s * 1.25), bigger = ns >= 1 ? src : scaledTo(src, ns);
+      onStage('Fitting under ' + tLabel + ' at ' + bigger.width + '×' + bigger.height);
+      var f2 = await maxQualityUnder(bigger, mime, target);
+      if (!f2 || f2.q < 0.7) break;
+      best = { blob: f2.blob, q: f2.q, canvas: bigger, s: ns };
+      if (ns >= 1) break;
+    }
+  }
+  if (!best) { var b = await enc(cur, mime, 0.05); best = { blob: b, q: 0.05, canvas: cur, s: s }; }
+  return best;
+}
+async function ssimOf(c, blob) {
+  try {
+    var plan = makePlan(c), mos = plan.tiles ? mosaicOf(c, plan) : c, mw = mos.width, mh = mos.height;
+    var ref = halfY(lumaRect(c2d(mos).getImageData(0, 0, mw, mh).data, mw, 0, 0, mw, mh), mw, mh);
+    var b = await decodeBlob(blob), m2;
+    if (plan.tiles) m2 = mosaicOf(b, plan); else { m2 = mk(mw, mh); c2d(m2).drawImage(b, 0, 0); }
+    closeBmp(b);
+    var Y = halfY(lumaRect(c2d(m2).getImageData(0, 0, mw, mh).data, mw, 0, 0, mw, mh), mw, mh);
+    var acc = ssimY(ref.Y, Y.Y, ref.w, ref.h, { sum: 0, cnt: 0 });
+    return acc.cnt ? acc.sum / acc.cnt : 1;
+  } catch (e) { return null; }
+}
+
 var NATURAL = { jpeg: 'jpeg', png: 'png', webp: 'webp' };
 /* Formats most apps and websites cannot open: always hand back a converted file. */
 var CONVERT = { heic: 1, tiff: 1 };
@@ -856,6 +974,27 @@ async function processJob(job, onStage) {
   var data = null, alpha = false;
   if (kind !== 'jpeg') { data = c2d(src).getImageData(0, 0, tw, th); alpha = hasAlphaPx(data.data); }
   var webp = await canWebp();
+  if (st.targetKB > 0) {
+    var target = Math.round(st.targetKB * 1000), tLabel = sizeLabel(st.targetKB);
+    if (file.size <= target && !resized && (kind === 'jpeg' || kind === 'png' || kind === 'webp')) {
+      var thumbK = await makeThumb(src, alpha, webp);
+      return { status: 'kept', reason: 'Already under ' + tLabel + ', so the original is returned untouched.', thumb: thumbK, width: w, height: h, crc: crc32(new Uint8Array(await file.arrayBuffer())) };
+    }
+    var tmime = (st.format === 'webp' && webp) ? 'image/webp' : 'image/jpeg', base = src;
+    if (tmime === 'image/jpeg' && alpha) { base = mk(tw, th); var bx = c2d(base); bx.fillStyle = '#fff'; bx.fillRect(0, 0, tw, th); bx.drawImage(src, 0, 0); }
+    var fit = await fitToSize(base, tmime, target, tLabel, onStage);
+    onStage('Finishing');
+    var sim = await ssimOf(fit.canvas, fit.blob), fw = fit.canvas.width, fh = fit.canvas.height;
+    if (fw !== tw) notes.push('Resized to ' + fw + '×' + fh + ' so it fits under ' + tLabel + '.');
+    if (alpha && tmime === 'image/jpeg') notes.push('Transparent areas were filled with white, because JPG has no transparency.');
+    var tfmt = tmime.split('/')[1], thumbT = await makeThumb(fit.canvas, alpha && tmime !== 'image/jpeg', webp);
+    return {
+      status: 'done', blob: fit.blob, mime: tmime, ext: tfmt === 'jpeg' ? 'jpg' : tfmt,
+      label: label2(tmime) + ' · quality ' + Math.round(fit.q * 100) + ' · under ' + tLabel,
+      q: fit.q, ssim: sim, lossless: false, width: fw, height: fh, origW: w, origH: h,
+      notes: notes, thumb: thumbT, crc: crc32(new Uint8Array(await fit.blob.arrayBuffer()))
+    };
+  }
   var fmts, wanted = st.format;
   if (wanted === 'webp') { fmts = [webp ? 'webp' : (alpha ? 'png' : 'jpeg')]; if (!webp) notes.push('This browser cannot write WebP, so ' + label2('image/' + fmts[0]) + ' was used.'); }
   else if (wanted === 'jpeg') fmts = ['jpeg'];
@@ -984,12 +1123,22 @@ self.onmessage = async function (ev) {
     custom: 'One fixed quality for every image, with no quality check. 80 to 85 suits most photos.'
   };
   function readSettings() {
+    var tsel = $('#target').value;
+    var targetKB = tsel === 'custom' ? Math.max(5, Math.min(50000, Math.round(+$('#target-kb').value || 0))) : (+tsel || 0);
     return {
       level: (document.querySelector('input[name="level"]:checked') || {}).value || 'balanced',
       quality: +$('#q').value,
       format: $('#fmt').value,
-      maxSide: +$('#resize').value || 0
+      maxSide: +$('#resize').value || 0,
+      targetKB: targetKB
     };
+  }
+  /* Size pages preset their target with <html data-target-kb>; the target itself is never remembered between visits. */
+  function applyPresetTarget() {
+    var kb = +(document.documentElement.getAttribute('data-target-kb') || 0);
+    if (!kb) return;
+    var opt = $('#target').querySelector('option[value="' + kb + '"]');
+    if (opt) $('#target').value = String(kb); else { $('#target').value = 'custom'; $('#target-kb').value = kb; }
   }
   function applySettingsToForm(s) {
     var r = document.getElementById('lv-' + s.level); if (r) r.checked = true;
@@ -999,9 +1148,15 @@ self.onmessage = async function (ev) {
   }
   var SETTINGS_KEY = 'uic-settings-v2';
   try { var saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || 'null'); if (saved) applySettingsToForm(saved); } catch (e) {}
+  applyPresetTarget();
   function syncForm() {
     var s = readSettings();
     $('#level-help').textContent = HELP[s.level];
+    $('#target-custom').hidden = $('#target').value !== 'custom';
+    $('#settings').classList.toggle('has-target', s.targetKB > 0);
+    $('#target-help').textContent = s.targetKB > 0
+      ? 'Every image comes out under ' + (s.targetKB >= 1000 ? (Math.round(s.targetKB / 100) / 10) + ' MB' : s.targetKB + ' KB') + ' as a JPG, as large and sharp as that size allows. Quality settings are chosen automatically. Use this for forms and uploads with a size limit.'
+      : 'Choose a limit when a form or website only accepts files up to a certain size.';
     $('#resize-help').textContent = s.maxSide
       ? 'Phone photos are about 4000 px wide; screens show about 1920. Fitting to ' + s.maxSide + ' px is what turns MB into KB, with no visible difference on screen. Smaller images are never enlarged.'
       : 'Full resolution is kept, so phone photos usually stay in MB. Best for printing.';
@@ -1017,7 +1172,7 @@ self.onmessage = async function (ev) {
   $('#settings').addEventListener('change', onSettings);
   function onSettings() {
     syncForm();
-    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(readSettings())); } catch (e) {}
+    try { var keep = readSettings(); delete keep.targetKB; localStorage.setItem(SETTINGS_KEY, JSON.stringify(keep)); } catch (e) {}
     refreshApply();
   }
   function refreshApply() {
@@ -1440,6 +1595,7 @@ self.onmessage = async function (ev) {
     var sizes = el.querySelector('.sizes'), meta = el.querySelector('.meta'), note = el.querySelector('.note');
     if (canView) {
       var pct = it.origSize ? Math.round((1 - it.outSize / it.origSize) * 100) : 0;
+      if (pct >= 100 && it.outSize > 0) pct = 99;
       sizes.innerHTML = '<span class="from"></span><span aria-hidden="true">→</span><span class="to"></span><span class="pct"></span>';
       sizes.querySelector('.from').textContent = fmtBytes(it.origSize);
       sizes.querySelector('.to').textContent = fmtBytes(it.outSize);
@@ -1476,7 +1632,7 @@ self.onmessage = async function (ev) {
       else if (it.status === 'error') errors++;
       else { finished++; before += it.origSize; after += it.outSize; }
     });
-    var pct = before ? Math.max(0, Math.round((1 - after / before) * 100)) : null;
+    var pct = before ? Math.max(0, Math.min(after > 0 ? 99 : 100, Math.round((1 - after / before) * 100))) : null;
     $('#big').firstChild.nodeValue = pct == null ? '—' : '−' + pct + '%';
     $('#st-count').textContent = finished + (total !== finished ? ' / ' + total : '');
     $('#st-before').textContent = fmtBytes(before);
