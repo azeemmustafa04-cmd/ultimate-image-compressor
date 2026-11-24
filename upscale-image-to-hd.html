@@ -14,7 +14,7 @@
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23151816'/%3E%3Cpath d='M8 8h6v2h-4v4H8zM24 8v6h-2v-4h-4V8zM8 24v-6h2v4h4v2zM24 24h-6v-2h4v-4h2z' fill='%23d24f1b'/%3E%3C/svg%3E">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "AI Image Upscaler to HD (Unlimited Image Compressor)", "url": "https://unlimitedimagecompressor.vercel.app/upscale-image-to-hd", "applicationCategory": "MultimediaApplication", "operatingSystem": "Any (runs in the browser)", "browserRequirements": "Requires a modern web browser", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Make small or blurry photos sharp and Full HD (1920 px) with AI, free and right in your browser. No upload, no sign-up, no watermark. Results are compressed without visible quality loss.", "isPartOf": {"@type": "WebSite", "name": "Unlimited Image Compressor", "url": "https://unlimitedimagecompressor.vercel.app/"}}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I make a photo HD?", "acceptedAnswer": {"@type": "Answer", "text": "Drop it on this page. AI enhance is already on: photos smaller than Full HD are enlarged with an ESRGAN AI model and saved at 1920 px, then compressed with a quality check."}}, {"@type": "Question", "name": "Can AI fix a blurry photo?", "acceptedAnswer": {"@type": "Answer", "text": "It makes soft and small photos noticeably sharper and cleaner. It cannot recover detail that was never captured, so a very tiny or very blurry photo improves but will not look like a new photo, and faces or text can look slightly smoothed."}}, {"@type": "Question", "name": "Is my photo uploaded to an AI server?", "acceptedAnswer": {"@type": "Answer", "text": "No. The AI model downloads once (about 3 MB) and runs inside your browser, so your photos never leave your device."}}, {"@type": "Question", "name": "How long does it take?", "acceptedAnswer": {"@type": "Answer", "text": "Usually a few seconds per photo on a laptop or phone with a modern browser. The first photo takes longer while the AI model loads."}}, {"@type": "Question", "name": "Is it free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is free, needs no sign-up, adds no watermark, and has no limit on the number of images."}}, {"@type": "Question", "name": "Is my photo uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything runs inside your browser, so your photos never leave your device."}}, {"@type": "Question", "name": "Can I compress iPhone HEIC photos?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. HEIC photos from iPhone and Samsung phones are opened in the browser and saved as JPG."}}, {"@type": "Question", "name": "Does it work on mobile phones?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It works in any modern browser on Android, iPhone, Windows and Mac."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I make a photo HD?", "acceptedAnswer": {"@type": "Answer", "text": "Drop it on this page. AI enhance is already on: photos smaller than Full HD are enlarged with an ESRGAN AI model and saved at 1920 px, then compressed with a quality check."}}, {"@type": "Question", "name": "Can AI fix a blurry photo?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, for most soft or out-of-focus photos. The tool measures how blurred the photo is, removes that blur, then enlarges it with AI, so edges, eyes and outlines come back much clearer. It cannot recover detail that was never captured, so a very tiny or very blurry photo improves but will not look like a new photo, and faces or text can look slightly smoothed."}}, {"@type": "Question", "name": "Is my photo uploaded to an AI server?", "acceptedAnswer": {"@type": "Answer", "text": "No. The AI model downloads once (about 3 MB) and runs inside your browser, so your photos never leave your device."}}, {"@type": "Question", "name": "How long does it take?", "acceptedAnswer": {"@type": "Answer", "text": "Usually a few seconds per photo on a laptop or phone with a modern browser. The first photo takes longer while the AI model loads."}}, {"@type": "Question", "name": "Is it free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is free, needs no sign-up, adds no watermark, and has no limit on the number of images."}}, {"@type": "Question", "name": "Is my photo uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything runs inside your browser, so your photos never leave your device."}}, {"@type": "Question", "name": "Can I compress iPhone HEIC photos?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. HEIC photos from iPhone and Samsung phones are opened in the browser and saved as JPG."}}, {"@type": "Question", "name": "Does it work on mobile phones?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It works in any modern browser on Android, iPhone, Windows and Mac."}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -445,7 +445,7 @@ td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-r
     <h2 id="faq-title">AI HD upscale: questions</h2>
     <div class="faq-grid">
       <div><h3>How do I make a photo HD?</h3><p>Drop it on this page. AI enhance is already on: photos smaller than Full HD are enlarged with an ESRGAN AI model and saved at 1920 px, then compressed with a quality check.</p></div>
-      <div><h3>Can AI fix a blurry photo?</h3><p>It makes soft and small photos noticeably sharper and cleaner. It cannot recover detail that was never captured, so a very tiny or very blurry photo improves but will not look like a new photo, and faces or text can look slightly smoothed.</p></div>
+      <div><h3>Can AI fix a blurry photo?</h3><p>Yes, for most soft or out-of-focus photos. The tool measures how blurred the photo is, removes that blur, then enlarges it with AI, so edges, eyes and outlines come back much clearer. It cannot recover detail that was never captured, so a very tiny or very blurry photo improves but will not look like a new photo, and faces or text can look slightly smoothed.</p></div>
       <div><h3>Is my photo uploaded to an AI server?</h3><p>No. The AI model downloads once (about 3 MB) and runs inside your browser, so your photos never leave your device.</p></div>
       <div><h3>How long does it take?</h3><p>Usually a few seconds per photo on a laptop or phone with a modern browser. The first photo takes longer while the AI model loads.</p></div>
       <div><h3>Is it free?</h3><p>Yes. It is free, needs no sign-up, adds no watermark, and has no limit on the number of images.</p></div>
@@ -640,6 +640,99 @@ function sharpenData(d, w, h, amount, r) {
       if (diff > 2 || diff < -2) d[p] = d[p] + amount * diff;
     }
   }
+}
+
+/* ---- blur estimate (re-blur method) and helpers ---- */
+function gaussKernel(s) {
+  var r = Math.max(1, Math.ceil(s * 3)), k = new Float32Array(2 * r + 1), sum = 0, i;
+  for (i = -r; i <= r; i++) { k[i + r] = Math.exp(-i * i / (2 * s * s)); sum += k[i + r]; }
+  for (i = 0; i < k.length; i++) k[i] /= sum;
+  return k;
+}
+function blurF(src, w, h, k, tmp, out) {
+  var r = (k.length - 1) >> 1, x, y, i, s, o, xx, yy;
+  for (y = 0; y < h; y++) {
+    o = y * w;
+    for (x = 0; x < w; x++) {
+      s = 0;
+      if (x >= r && x < w - r) { for (i = -r; i <= r; i++) s += src[o + x + i] * k[i + r]; }
+      else { for (i = -r; i <= r; i++) { xx = x + i; xx = xx < 0 ? -xx : xx >= w ? 2 * w - 2 - xx : xx; if (xx < 0) xx = 0; if (xx >= w) xx = w - 1; s += src[o + xx] * k[i + r]; } }
+      tmp[o + x] = s;
+    }
+  }
+  for (y = 0; y < h; y++) {
+    if (y >= r && y < h - r) {
+      for (x = 0; x < w; x++) { s = 0; for (i = -r; i <= r; i++) s += tmp[(y + i) * w + x] * k[i + r]; out[y * w + x] = s; }
+    } else {
+      for (x = 0; x < w; x++) {
+        s = 0;
+        for (i = -r; i <= r; i++) { yy = y + i; yy = yy < 0 ? -yy : yy >= h ? 2 * h - 2 - yy : yy; if (yy < 0) yy = 0; if (yy >= h) yy = h - 1; s += tmp[yy * w + x] * k[i + r]; }
+        out[y * w + x] = s;
+      }
+    }
+  }
+  return out;
+}
+function lumaF(d, n) {
+  var Y = new Float32Array(n);
+  for (var i = 0, p = 0; i < n; i++, p += 4) Y[i] = 0.299 * d[p] + 0.587 * d[p + 1] + 0.114 * d[p + 2];
+  return Y;
+}
+function gradF(Y, w, h, out) {
+  for (var y = 1; y < h - 1; y++) for (var x = 1, i = y * w + 1; x < w - 1; x++, i++) {
+    var gx = Y[i + 1] - Y[i - 1], gy = Y[i + w] - Y[i - w];
+    out[i] = Math.sqrt(gx * gx + gy * gy);
+  }
+  return out;
+}
+/* Gaussian blur radius (sigma, in pixels) of the image's strongest edges, by the re-blur method. 0 means sharp. */
+function blurSigmaOf(Y, w, h) {
+  if (w < 32 || h < 32) return 0;
+  var n = w * h, SR = 2, tmp = new Float32Array(n), Yb = blurF(Y, w, h, gaussKernel(SR), tmp, new Float32Array(n));
+  var g0 = gradF(Y, w, h, new Float32Array(n)), g1 = gradF(Yb, w, h, tmp.fill(0));
+  var hist = new Uint32Array(512), i, c = 0, cnt = 0;
+  for (i = 0; i < n; i++) if (g0[i] > 6) { hist[Math.min(511, g0[i] | 0)]++; cnt++; }
+  if (cnt < 200) return 0;
+  var want = Math.max(100, cnt * 0.03), t = 511;
+  for (; t > 6; t--) { c += hist[t]; if (c >= want) break; }
+  var rs = [];
+  for (i = 0; i < n; i++) if (g0[i] >= t && g1[i] > 0.5) rs.push(g0[i] / g1[i]);
+  if (rs.length < 50) return 0;
+  rs.sort(function (a, b) { return a - b; });
+  var R = rs[rs.length >> 1];
+  return SR / Math.sqrt(Math.max(R * R - 1, 0.01));
+}
+/* ---- deblur: Richardson-Lucy deconvolution of luminance with a Gaussian PSF, run step by step ---- */
+function deblurPlan(est, n) {
+  if (!(est >= 1.0)) return null;
+  var sigma = Math.min(4, Math.sqrt(est * est - 0.25) * 0.85);
+  return { sigma: sigma, iters: n > 2000000 ? 8 : n > 900000 ? 12 : 16 };
+}
+function rlStart(Y, w, h, sigma) {
+  var n = w * h, st = { Y: Y, w: w, h: h, k: gaussKernel(sigma), est: new Float32Array(n), tmp: new Float32Array(n), c: new Float32Array(n), ratio: new Float32Array(n) };
+  for (var i = 0; i < n; i++) st.est[i] = Y[i] + 1;
+  return st;
+}
+function rlStep(st) {
+  var n = st.w * st.h, i, Y = st.Y, est = st.est, c = st.c, ratio = st.ratio;
+  blurF(est, st.w, st.h, st.k, st.tmp, c);
+  for (i = 0; i < n; i++) ratio[i] = (Y[i] + 1) / Math.max(c[i], 0.5);
+  blurF(ratio, st.w, st.h, st.k, st.tmp, c);
+  for (i = 0; i < n; i++) { var v = est[i] * c[i]; est[i] = v < 0.5 ? 0.5 : v > 400 ? 400 : v; }
+}
+function rlApply(st, d) {
+  var n = st.w * st.h, est = st.est, Y = st.Y;
+  for (var i = 0, p = 0; i < n; i++, p += 4) {
+    var dl = est[i] - 1 - Y[i];
+    if (dl > 80) dl = 80; else if (dl < -80) dl = -80;
+    var r = d[p] + dl, g = d[p + 1] + dl, b = d[p + 2] + dl;
+    d[p] = r < 0 ? 0 : r > 255 ? 255 : r; d[p + 1] = g < 0 ? 0 : g > 255 ? 255 : g; d[p + 2] = b < 0 ? 0 : b > 255 ? 255 : b;
+  }
+}
+function deblurData(d, w, h, plan, Y) {
+  var st = rlStart(Y || lumaF(d, w * h), w, h, plan.sigma);
+  for (var it = 0; it < plan.iters; it++) rlStep(st);
+  rlApply(st, d);
 }
 
 /* ---- SSIM on luminance (alpha composited over mid grey) ---- */
@@ -1026,7 +1119,19 @@ async function processJob(job, onStage) {
 
   var data = null, alpha = false;
   if (kind !== 'jpeg') { data = c2d(src).getImageData(0, 0, tw, th); alpha = hasAlphaPx(data.data); }
-  if (st.enhance && !alpha && (!job.enhanced || scale > 1.3)) {
+  if (job.preDeblurred) notes.push(job.enhanced ? 'The blur was removed first, then AI made it HD.' : 'The blur was removed first.');
+  if (st.enhance && !alpha && !job.enhanced && !job.preDeblurred) {
+    var bd = data || c2d(src).getImageData(0, 0, tw, th), bY = lumaF(bd.data, tw * th), plan = deblurPlan(blurSigmaOf(bY, tw, th), tw * th);
+    if (plan) {
+      onStage('Removing blur');
+      deblurData(bd.data, tw, th, plan, bY);
+      c2d(src).putImageData(bd, 0, 0);
+      if (data) data = bd;
+      notes.push('This photo was blurry, so the blur was removed.');
+      job.deblurred = true;
+    }
+  }
+  if (st.enhance && !alpha && !job.deblurred && (!job.enhanced || scale > 1.3)) {
     var sd = data || c2d(src).getImageData(0, 0, tw, th), sharp = sharpnessOf(sd.data, tw, th);
     if (sharp < 150) {
       onStage('Sharpening a soft photo');
@@ -1040,7 +1145,7 @@ async function processJob(job, onStage) {
   var webp = await canWebp();
   if (st.targetKB > 0) {
     var target = Math.round(st.targetKB * 1000), tLabel = sizeLabel(st.targetKB);
-    if (file.size <= target && !resized && !job.enhanced && !job.aiFallback && !job.sharpened && (kind === 'jpeg' || kind === 'png' || kind === 'webp')) {
+    if (file.size <= target && !resized && !job.enhanced && !job.aiFallback && !job.sharpened && !job.deblurred && (kind === 'jpeg' || kind === 'png' || kind === 'webp')) {
       var thumbK = await makeThumb(src, alpha, webp);
       return { status: 'kept', reason: 'Already under ' + tLabel + ', so the original is returned untouched.', thumb: thumbK, width: w, height: h, crc: crc32(new Uint8Array(await file.arrayBuffer())) };
     }
@@ -1055,7 +1160,7 @@ async function processJob(job, onStage) {
     return {
       status: 'done', blob: fit.blob, mime: tmime, ext: tfmt === 'jpeg' ? 'jpg' : tfmt,
       label: label2(tmime) + ' · quality ' + Math.round(fit.q * 100) + ' · under ' + tLabel,
-      q: fit.q, ssim: sim, lossless: false, width: fw, height: fh, origW: job.origW || w, origH: job.origH || h, enhanced: !!job.enhanced, sharpened: !!job.sharpened,
+      q: fit.q, ssim: sim, lossless: false, width: fw, height: fh, origW: job.origW || w, origH: job.origH || h, enhanced: !!job.enhanced, sharpened: !!job.sharpened, deblurred: !!(job.deblurred || job.preDeblurred),
       notes: notes, thumb: thumbT, crc: crc32(new Uint8Array(await fit.blob.arrayBuffer()))
     };
   }
@@ -1094,18 +1199,18 @@ async function processJob(job, onStage) {
   var thumb = await makeThumb(src, alpha, webp);
   var photoPng = kind === 'png' && !alpha && fmts.length === 1 && fmts[0] === 'png' && best.lossless && !/colors/.test(best.label);
   var photoTip = 'Tip: photos saved as PNG shrink far more as JPG or WebP. Choose "Smallest file" under Save as.';
-  if (mayKeep && !resized && !job.sharpened && !job.enhanced && !job.aiFallback && best.blob.size >= file.size * 0.98) {
+  if (mayKeep && !resized && !job.sharpened && !job.deblurred && !job.enhanced && !job.aiFallback && best.blob.size >= file.size * 0.98) {
     return { status: 'kept', reason: 'Already well compressed, so the original is returned untouched.' + (photoPng ? ' ' + photoTip : ''), thumb: thumb, width: w, height: h, crc: crc32(new Uint8Array(await file.arrayBuffer())) };
   }
   if (photoPng) notes.push(photoTip);
   if (outFmt === 'jpeg' && alpha) notes.push('Transparent areas were filled with white, because JPG has no transparency.');
-  if (best.blob.size >= file.size && !job.enhanced && !job.aiFallback && !job.sharpened) notes.push(
+  if (best.blob.size >= file.size && !job.enhanced && !job.aiFallback && !job.sharpened && !job.deblurred) notes.push(
     kind === 'heic' ? 'HEIC is already very compact, so the ' + label2(best.mime) + ' is larger, but it now opens everywhere. Pick a Resize size for a smaller file.'
     : CONVERT[kind] ? 'Converted so it opens everywhere.'
     : 'Bigger than the original. Choose "Same format as the original" to keep originals that cannot shrink.');
   return {
     status: 'done', blob: best.blob, mime: best.mime, ext: outFmt === 'jpeg' ? 'jpg' : outFmt, label: best.label,
-    q: best.q, ssim: best.ssim, lossless: !!best.lossless, width: tw, height: th, origW: job.origW || w, origH: job.origH || h, enhanced: !!job.enhanced, sharpened: !!job.sharpened,
+    q: best.q, ssim: best.ssim, lossless: !!best.lossless, width: tw, height: th, origW: job.origW || w, origH: job.origH || h, enhanced: !!job.enhanced, sharpened: !!job.sharpened, deblurred: !!(job.deblurred || job.preDeblurred),
     notes: notes, thumb: thumb, crc: crc32(new Uint8Array(await best.blob.arrayBuffer()))
   };
 }
@@ -1224,7 +1329,7 @@ self.onmessage = async function (ev) {
       ? 'Every image comes out under ' + (s.targetKB >= 1000 ? (Math.round(s.targetKB / 100) / 10) + ' MB' : s.targetKB + ' KB') + ' as a JPG, as large and sharp as that size allows. Quality settings are chosen automatically. Use this for forms and uploads with a size limit.'
       : 'Choose a limit when a form or website only accepts files up to a certain size.';
     $('#enhance-help').textContent = s.enhance
-      ? 'Photos smaller than ' + (s.maxSide || 1920) + ' px are enlarged with AI (ESRGAN) and made Full HD; soft photos are sharpened. The AI downloads once (about 3 MB) and runs on your device, so it can take a few seconds per photo. It cannot recover detail that was never captured, so faces and text can look slightly smoothed.'
+      ? 'Photos smaller than ' + (s.maxSide || 1920) + ' px are enlarged with AI (ESRGAN) and made Full HD; blurry photos are deblurred first and soft ones sharpened. The AI downloads once (about 3 MB) and runs on your device, so it can take a few seconds per photo. It cannot recover detail that was never captured, so faces and text can look slightly smoothed.'
       : 'Off: images are only compressed. Turn on to enlarge small photos with AI and sharpen blurry ones.';
     $('#resize-help').textContent = s.maxSide
       ? 'Phone photos are about 4000 px wide; screens show about 1920. Fitting to ' + s.maxSide + ' px is what turns MB into KB, with no visible difference on screen. Smaller images are never enlarged.'
@@ -1330,7 +1435,7 @@ self.onmessage = async function (ev) {
     it.usedKey = JSON.stringify(st);
     return {
       id: it.id, file: it.file, kind: it.kind, settings: st, limits: { area: Math.min(LIMITS.area, it.retryArea || Infinity), side: LIMITS.side },
-      enhanced: !!it.enhanced, aiFallback: !!it.aiFallback, aiSlow: !!it.aiSlow, plainUp: !!it.plainUp, origW: it.origW, origH: it.origH
+      enhanced: !!it.enhanced, aiFallback: !!it.aiFallback, aiSlow: !!it.aiSlow, plainUp: !!it.plainUp, preDeblurred: !!it.deblurred, origW: it.origW, origH: it.origH
     };
   }
   function needsPrep(it) {
@@ -1363,7 +1468,7 @@ self.onmessage = async function (ev) {
     prepItem(it, function (s) { if (it.gen === gen) { it.stage = s; updateStage(it); } }).then(function (res) {
       if (S.items.get(it.id) !== it || it.gen !== gen) { if (res.bitmap && res.bitmap.close) res.bitmap.close(); return; }
       it.prepped = true; it.bitmap = res.bitmap || null;
-      it.enhanced = !!res.enhanced; it.aiFallback = !!res.aiFallback; it.aiSlow = !!res.aiSlow; it.plainUp = !!res.plainUp; it.origW = res.origW; it.origH = res.origH;
+      it.enhanced = !!res.enhanced; it.aiFallback = !!res.aiFallback; it.aiSlow = !!res.aiSlow; it.plainUp = !!res.plainUp; it.deblurred = !!res.deblurred; it.origW = res.origW; it.origH = res.origH;
       it.status = 'queued';
       if (POOL.ok) S.wq.unshift(it.id); else S.mq.unshift(it.id);
     }, function (e) {
@@ -1381,15 +1486,33 @@ self.onmessage = async function (ev) {
     var to = st.maxSide || 1920, side = Math.max(b.width, b.height);
     if (side >= to * 0.9 || Math.min(b.width, b.height) < 48 || bitmapHasAlpha(b)) return { bitmap: b };
     if (side >= Math.min(1280, to * 0.67)) return { bitmap: b, plainUp: true };
+    var ow = b.width, oh = b.height, deblurred = false;
+    var db = await deblurBitmap(b, onStage);
+    if (db) { if (b.close) b.close(); b = db; deblurred = true; }
     try {
       var up = await aiUpscale(b, onStage);
-      var res = { bitmap: up, enhanced: true, origW: b.width, origH: b.height };
+      var res = { bitmap: up, enhanced: true, deblurred: deblurred, origW: ow, origH: oh };
       if (b.close) b.close();
       return res;
     } catch (e) {
       if (window.console) console.warn('AI enhance unavailable:', e);
-      return { bitmap: b, aiFallback: true, aiSlow: !!(e && e.aiSlow) };
+      return { bitmap: b, deblurred: deblurred, aiFallback: true, aiSlow: !!(e && e.aiSlow) };
     }
+  }
+  /* Removes Gaussian-like blur before the AI enlarges the photo. Runs in small steps so the page stays responsive. */
+  async function deblurBitmap(b, onStage) {
+    var w = b.width, h = b.height, c = document.createElement('canvas'); c.width = w; c.height = h;
+    var x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(b, 0, 0);
+    var id = x.getImageData(0, 0, w, h), Y = lumaF(id.data, w * h), plan = deblurPlan(blurSigmaOf(Y, w, h), w * h);
+    if (!plan) return null;
+    var st = rlStart(Y, w, h, plan.sigma);
+    for (var it = 0; it < plan.iters; it++) {
+      onStage('Removing blur ' + Math.round(it / plan.iters * 100) + '%');
+      await new Promise(function (r) { setTimeout(r, 0); });
+      rlStep(st);
+    }
+    rlApply(st, id.data); x.putImageData(id, 0, 0);
+    return await createImageBitmap(c);
   }
   function bitmapHasAlpha(b) {
     var c = document.createElement('canvas'); c.width = b.width; c.height = b.height;
@@ -1673,7 +1796,7 @@ self.onmessage = async function (ev) {
   }
   function resetItem(it) {
     it.gen++; it.status = 'queued'; it.result = null; it.stage = ''; it.triedMain = false; it.error = null;
-    it.prepped = false; it.enhanced = false; it.aiFallback = false; it.aiSlow = false; it.plainUp = false; it.origW = it.origH = undefined;
+    it.prepped = false; it.enhanced = false; it.aiFallback = false; it.aiSlow = false; it.plainUp = false; it.deblurred = false; it.origW = it.origH = undefined;
     if (it.bitmap && it.bitmap.close) it.bitmap.close();
     it.bitmap = null;
     if (it.thumbUrl) { URL.revokeObjectURL(it.thumbUrl); it.thumbUrl = null; }
@@ -1729,8 +1852,8 @@ self.onmessage = async function (ev) {
     el = el || it.el; if (!el) return;
     var r = it.result;
     el.dataset.status = it.status;
-    el.dataset.enhanced = r && r.status === 'done' && (r.enhanced || r.sharpened) ? '1' : '0';
-    el.querySelector('.chip').textContent = (it.example ? 'Example · ' : '') + (it.status === 'done' && r && r.enhanced ? 'AI enhanced' : it.status === 'done' && r && r.sharpened ? 'Sharpened' : it.status === 'done' && it.outSize > it.origSize ? 'Converted' : CHIP[it.status]);
+    el.dataset.enhanced = r && r.status === 'done' && (r.enhanced || r.sharpened || r.deblurred) ? '1' : '0';
+    el.querySelector('.chip').textContent = (it.example ? 'Example · ' : '') + (it.status === 'done' && r && r.enhanced ? 'AI enhanced' : it.status === 'done' && r && r.deblurred ? 'Deblurred' : it.status === 'done' && r && r.sharpened ? 'Sharpened' : it.status === 'done' && it.outSize > it.origSize ? 'Converted' : CHIP[it.status]);
     var src = KIND_LABEL[it.kind] || 'IMG', out = src;
     if (r && r.status === 'done') out = r.mime === 'image/svg+xml' ? 'SVG' : label2(r.mime);
     el.querySelector('.fmt').textContent = it.status === 'done' && out !== src ? src + ' → ' + out : src;
@@ -1759,7 +1882,7 @@ self.onmessage = async function (ev) {
       sizes.innerHTML = '<span class="from"></span><span aria-hidden="true">→</span><span class="to"></span><span class="pct"></span>';
       sizes.querySelector('.from').textContent = fmtBytes(it.origSize);
       sizes.querySelector('.to').textContent = fmtBytes(it.outSize);
-      var hd = it.status === 'done' && r && (r.enhanced || r.sharpened) && pct < 0;
+      var hd = it.status === 'done' && r && (r.enhanced || r.sharpened || r.deblurred) && pct < 0;
       sizes.querySelector('.pct').textContent = hd ? (Math.max(r.width, r.height) >= 1900 ? 'Full HD' : 'HD') : it.status === 'done' ? (pct > 0 ? '−' + pct + '%' : (pct < 0 ? '+' + (-pct) + '%' : '0%')) : '0%';
       sizes.querySelector('.pct').classList.toggle('up', it.status === 'done' && pct < 0 && !hd);
       var parts = [];
