@@ -1252,6 +1252,76 @@ self.onmessage = async function (ev) {
   }
 };
 </script>
+<script type="text/plain" id="ai-glue">
+/* AI worker: removes blur, then enlarges 2x with ESRGAN Slim on the GPU (WebGL in an OffscreenCanvas). */
+var AI_UP = null;
+function aiLoad(lib) {
+  if (AI_UP) return AI_UP;
+  AI_UP = new Promise(function (resolve) { resolve(); }).then(function () {
+    if (typeof OffscreenCanvas === 'undefined') throw new Error('No OffscreenCanvas');
+    importScripts(lib.tf, lib.x2);
+    if (!self.tf || !self.ESRGANSlim2x) throw new Error('AI libraries did not load');
+    if (!self.DefaultUpscalerJSModel) self.DefaultUpscalerJSModel = self.ESRGANSlim2x;
+    if (typeof self.window === 'undefined') self.window = self;
+    importScripts(lib.up);
+    if (typeof self.Upscaler !== 'function') throw new Error('Upscaler did not load');
+    return tf.setBackend('webgl');
+  }).then(function () {
+    return tf.ready();
+  }).then(function () {
+    if (tf.getBackend() !== 'webgl') throw new Error('No GPU (WebGL) in this browser');
+    var up = new Upscaler({ model: self.ESRGANSlim2x });
+    return Promise.resolve(up.getModel ? up.getModel() : null).then(function () { return up; });
+  });
+  AI_UP.catch(function () { AI_UP = null; });
+  return AI_UP;
+}
+self.onmessage = function (e) {
+  var m = e.data;
+  if (m.type === 'init') {
+    aiLoad(m.lib).then(function (up) { if (up.warmup) return up.warmup([m.patch]); }).catch(function () {});
+  } else if (m.type === 'run') aiJob(m);
+};
+function aiJob(m) {
+  var id = m.id, w = m.w, h = m.h, d = new Uint8ClampedArray(m.buf), deblurred = false;
+  function stage(s) { self.postMessage({ type: 'stage', id: id, stage: s }); }
+  function send(extra) {
+    var msg = { type: 'done', id: id, w: w, h: h, buf: d.buffer, deblurred: deblurred, enhanced: false };
+    for (var k in extra) msg[k] = extra[k];
+    self.postMessage(msg, [msg.buf]);
+  }
+  try {
+    var Y = lumaF(d, w * h), plan = deblurPlan(blurSigmaOf(Y, w, h), w * h);
+    if (plan) {
+      var rs = rlStart(Y, w, h, plan.sigma);
+      for (var i = 0; i < plan.iters; i++) { if (i % 2 === 0) stage('Removing blur ' + Math.round(i / plan.iters * 100) + '%'); rlStep(rs); }
+      rlApply(rs, d); deblurred = true;
+    }
+  } catch (err) {}
+  stage('Loading the AI enhancer');
+  aiLoad(m.lib).then(function (up) {
+    stage('Enhancing with AI');
+    var n = w * h, rgb = new Int32Array(n * 3);
+    for (var p = 0, q = 0; p < n * 4; p += 4, q += 3) { rgb[q] = d[p]; rgb[q + 1] = d[p + 1]; rgb[q + 2] = d[p + 2]; }
+    var input = tf.tensor3d(rgb, [h, w, 3], 'int32');
+    return up.upscale(input, {
+      output: 'tensor', patchSize: m.patch.patchSize, padding: m.patch.padding, awaitNextFrame: false,
+      progress: function (pr) { stage('Enhancing with AI ' + Math.round(pr * 100) + '%'); }
+    }).then(function (out) {
+      input.dispose();
+      var t = tf.tidy(function () { var o = out.shape.length === 4 ? out.squeeze([0]) : out; return tf.clipByValue(o, 0, 255).cast('int32'); });
+      out.dispose();
+      var sh = t.shape;
+      return t.data().then(function (v) {
+        t.dispose();
+        var W = sh[1], H = sh[0], N = W * H, o4 = new Uint8ClampedArray(N * 4);
+        for (var a = 0, b = 0, c = 0; a < N; a++, b += 3, c += 4) { o4[c] = v[b]; o4[c + 1] = v[b + 1]; o4[c + 2] = v[b + 2]; o4[c + 3] = 255; }
+        self.postMessage({ type: 'done', id: id, w: W, h: H, buf: o4.buffer, deblurred: deblurred, enhanced: true }, [o4.buffer]);
+      });
+    }, function (err) { input.dispose(); throw err; });
+  }).catch(function (err) { send({ aiError: String((err && err.message) || err) }); });
+}
+</script>
 
 <!-- ===================== Page ===================== -->
 <script>
@@ -1496,36 +1566,25 @@ self.onmessage = async function (ev) {
     if (!NEEDS_PREP[it.kind] && (it.kind === 'gif' || it.kind === 'png' || it.kind === 'webp') && await isAnimated(it.file, it.kind)) return { bitmap: null };
     var b = await decodeAny(it.file, it.kind, onStage);
     if (!enhance) return { bitmap: b };
-    var to = st.maxSide || 1920, side = Math.max(b.width, b.height);
-    if (side >= to * 0.9 || Math.min(b.width, b.height) < 48 || bitmapHasAlpha(b)) return { bitmap: b };
-    if (side >= Math.min(1280, to * 0.67)) return { bitmap: b, plainUp: true };
-    var ow = b.width, oh = b.height, deblurred = false;
-    var db = await deblurBitmap(b, onStage);
-    if (db) { if (b.close) b.close(); b = db; deblurred = true; }
-    try {
-      var up = await aiUpscale(b, onStage);
-      var res = { bitmap: up, enhanced: true, deblurred: deblurred, origW: ow, origH: oh };
-      if (b.close) b.close();
-      return res;
-    } catch (e) {
-      if (window.console) console.warn('AI enhance unavailable:', e);
-      return { bitmap: b, deblurred: deblurred, aiFallback: true, aiSlow: !!(e && e.aiSlow) };
-    }
-  }
-  /* Removes Gaussian-like blur before the AI enlarges the photo. Runs in small steps so the page stays responsive. */
-  async function deblurBitmap(b, onStage) {
-    var w = b.width, h = b.height, c = document.createElement('canvas'); c.width = w; c.height = h;
+    var to = st.maxSide || 1920, side = Math.max(b.width, b.height), ow = b.width, oh = b.height;
+    if (side >= to * 0.9 || Math.min(ow, oh) < 48) return { bitmap: b };
+    var c = document.createElement('canvas'); c.width = ow; c.height = oh;
     var x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(b, 0, 0);
-    var id = x.getImageData(0, 0, w, h), Y = lumaF(id.data, w * h), plan = deblurPlan(blurSigmaOf(Y, w, h), w * h);
-    if (!plan) return null;
-    var st = rlStart(Y, w, h, plan.sigma);
-    for (var it = 0; it < plan.iters; it++) {
-      onStage('Removing blur ' + Math.round(it / plan.iters * 100) + '%');
-      await new Promise(function (r) { setTimeout(r, 0); });
-      rlStep(st);
+    var data = x.getImageData(0, 0, ow, oh).data; c.width = c.height = 1;
+    if (hasAlphaPx(data)) return { bitmap: b };
+    if (side >= Math.min(1280, to * 0.67)) return { bitmap: b, plainUp: true };
+    var m;
+    try { m = await aiRun(data, ow, oh, onStage); }
+    catch (e) {
+      if (window.console) console.warn('AI enhance stopped:', e && e.message);
+      return { bitmap: b, aiFallback: true, aiSlow: !!(e && e.aiSlow) };
     }
-    rlApply(st, id.data); x.putImageData(id, 0, 0);
-    return await createImageBitmap(c);
+    if (m.aiError && window.console) console.warn('AI enhance unavailable:', m.aiError);
+    var bmp = await createImageBitmap(new ImageData(new Uint8ClampedArray(m.buf), m.w, m.h));
+    if (b.close) b.close();
+    return m.enhanced
+      ? { bitmap: bmp, enhanced: true, deblurred: !!m.deblurred, origW: ow, origH: oh }
+      : { bitmap: bmp, deblurred: !!m.deblurred, aiFallback: true };
   }
   function bitmapHasAlpha(b) {
     var c = document.createElement('canvas'); c.width = b.width; c.height = b.height;
@@ -1533,60 +1592,52 @@ self.onmessage = async function (ev) {
     return hasAlphaPx(x.getImageData(0, 0, b.width, b.height).data);
   }
 
-  /* ---------- AI enhance: TensorFlow.js + UpscalerJS (ESRGAN Slim), downloaded only when first used ---------- */
+  /* ---------- AI enhance: deblur + TensorFlow.js + UpscalerJS (ESRGAN Slim) in its own background worker,
+     so the page never freezes. The libraries download only when AI enhance is used. ---------- */
   var AI_LIB = {
     tf: 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js',
     up: 'https://cdn.jsdelivr.net/npm/upscaler@1.0.0/dist/browser/umd/upscaler.min.js',
     x2: 'https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-slim@1.0.0/dist/umd/models/esrgan-slim/src/x2/index.min.js'
   };
-  function aiBase() {
-    return once('aiBase', function () {
-      return loadScript(AI_LIB.tf).then(function () { return loadScript(AI_LIB.x2); }).then(function () {
-        if (!window.tf || !window.ESRGANSlim2x) throw libErr();
-        if (!window.DefaultUpscalerJSModel) window.DefaultUpscalerJSModel = window.ESRGANSlim2x;
-        return loadScript(AI_LIB.up);
-      }).then(function () { if (typeof window.Upscaler !== 'function') throw libErr(); });
-    });
+  var AI_PATCH = { patchSize: 128, padding: 8 }, AI_TIME_LIMIT = 75000;
+  var AIW = { w: null, jobs: {}, seq: 0 };
+  function aiWorker() {
+    if (AIW.w) return AIW.w;
+    var src = document.getElementById('engine').textContent + '\n' + document.getElementById('ai-glue').textContent;
+    var w = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+    w.onmessage = function (e) {
+      var m = e.data, j = AIW.jobs[m.id];
+      if (!j) return;
+      if (m.type === 'stage') j.onStage(m.stage);
+      else if (m.type === 'done') { delete AIW.jobs[m.id]; clearTimeout(j.timer); j.resolve(m); }
+    };
+    w.onerror = function (ev) { if (ev && ev.preventDefault) ev.preventDefault(); aiKill('The AI worker stopped'); };
+    AIW.w = w;
+    return w;
   }
-  var AI_PATCH = { patchSize: 128, padding: 8 }, AI_TIME_LIMIT = 60000;
-  function aiUpscaler() {
-    return once('ai2', function () {
-      return aiBase().then(function () {
-        if (!window.ESRGANSlim2x) throw libErr();
-        var up = new window.Upscaler({ model: window.ESRGANSlim2x });
-        return Promise.resolve(up.getModel ? up.getModel() : null).then(function () { return up; });
-      });
+  function aiKill(reason, slow) {
+    if (AIW.w) { try { AIW.w.terminate(); } catch (e) {} }
+    AIW.w = null; S.aiPreloaded = false;
+    Object.keys(AIW.jobs).forEach(function (k) {
+      var j = AIW.jobs[k]; clearTimeout(j.timer); delete AIW.jobs[k];
+      var err = new Error(reason); err.aiSlow = !!slow; j.reject(err);
     });
   }
   /* Downloads the AI model and prepares it while the visitor is still choosing photos. */
   function aiPreload() {
     if (!$('#enhance').checked || S.aiPreloaded) return;
     S.aiPreloaded = true;
-    aiUpscaler().then(function (up) { if (up.warmup) return up.warmup([AI_PATCH]); }).catch(function () {});
+    try { aiWorker().postMessage({ type: 'init', lib: AI_LIB, patch: AI_PATCH }); } catch (e) {}
   }
-  async function aiUpscale(bitmap, onStage) {
-    onStage('Loading the AI enhancer');
-    var up = await aiUpscaler(), tf = window.tf;
-    var input = tf.browser.fromPixels(bitmap);
-    var ctl = window.AbortController ? new AbortController() : null, slow = false;
-    var timer = setTimeout(function () { slow = true; if (ctl) ctl.abort(); try { if (up.abort) up.abort(); } catch (e) {} }, AI_TIME_LIMIT);
-    try {
-      onStage('Enhancing with AI');
-      await new Promise(function (r) { setTimeout(r, 40); });
-      var out;
-      try {
-        out = await up.upscale(input, {
-          output: 'tensor', patchSize: AI_PATCH.patchSize, padding: AI_PATCH.padding, awaitNextFrame: false, signal: ctl ? ctl.signal : undefined,
-          progress: function (p) { onStage('Enhancing with AI ' + Math.round(p * 100) + '%'); }
-        });
-      } catch (e) { if (slow) { var se = new Error('AI too slow'); se.aiSlow = true; throw se; } throw e; }
-      if (slow) { try { out.dispose(); } catch (e) {} var se2 = new Error('AI too slow'); se2.aiSlow = true; throw se2; }
-      var t = tf.tidy(function () { var o = out.shape.length === 4 ? out.squeeze([0]) : out; return tf.clipByValue(o, 0, 255).cast('int32'); });
-      out.dispose();
-      var shp = t.shape, px = await tf.browser.toPixels(t);
-      t.dispose();
-      return await createImageBitmap(new ImageData(px, shp[1], shp[0]));
-    } finally { clearTimeout(timer); input.dispose(); }
+  function aiRun(data, w, h, onStage) {
+    return new Promise(function (resolve, reject) {
+      var wk;
+      try { wk = aiWorker(); } catch (e) { reject(e); return; }
+      var id = ++AIW.seq;
+      AIW.jobs[id] = { resolve: resolve, reject: reject, onStage: onStage, timer: setTimeout(function () { aiKill('AI too slow', true); }, AI_TIME_LIMIT) };
+      onStage('Checking for blur');
+      wk.postMessage({ type: 'run', id: id, w: w, h: h, buf: data.buffer, lib: AI_LIB, patch: AI_PATCH }, [data.buffer]);
+    });
   }
   function runOnWorker(slot, it) {
     it.status = 'working'; it.stage = 'Starting'; updateCard(it);
