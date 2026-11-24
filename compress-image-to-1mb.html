@@ -129,6 +129,14 @@ h1 {
 .custom.kb { grid-template-columns: auto 1fr auto; margin-top: 8px; }
 .custom.kb input { width: 100%; padding: 8px 10px; border: 1.5px solid var(--ink); border-radius: 3px; background: var(--sheet); font: 500 14px var(--mono); }
 .settings.has-target fieldset { opacity: .45; }
+.toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; font: 600 14px/1.35 var(--body); }
+.toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle .track { flex: none; position: relative; width: 40px; height: 22px; border-radius: 11px; background: var(--rule); transition: background-color .15s; }
+.toggle .track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--sheet); box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s; }
+.toggle input:checked + .track { background: var(--accent); }
+.toggle input:checked + .track::after { transform: translateX(18px); }
+.toggle input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+.frame[data-status="done"][data-enhanced="1"] .chip { background: var(--accent); color: #fff; }
 .sizes-nav { margin: 14px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 14px; color: var(--muted); }
 .sizes-nav a { font: 500 12.5px/1 var(--mono); color: var(--ink); text-decoration: none; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 2px; background: var(--sheet); }
 .sizes-nav a:hover { border-color: var(--ink); }
@@ -287,7 +295,7 @@ td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-r
     <div>
       <h1>Compress Image to 1 MB</h1>
       <p class="lede">Make any photo 1 MB or smaller for websites, email, WhatsApp and uploads with a size limit. It runs in your browser, so nothing is uploaded, and every image keeps the best quality that fits in 1 MB.</p>
-      <nav class="sizes-nav" aria-label="Compress to an exact size"><a href="https://unlimitedimagecompressor.vercel.app/">All sizes</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-10kb">10 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-20kb">20 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-30kb">30 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-50kb">50 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-100kb">100 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-200kb">200 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-500kb">500 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-1mb" aria-current="page">1 MB</a></nav>
+      <nav class="sizes-nav" aria-label="Compress to an exact size"><a href="https://unlimitedimagecompressor.vercel.app/">All sizes</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-10kb">10 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-20kb">20 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-30kb">30 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-50kb">50 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-100kb">100 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-200kb">200 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-500kb">500 KB</a><a href="https://unlimitedimagecompressor.vercel.app/compress-image-to-1mb" aria-current="page">1 MB</a><a href="https://unlimitedimagecompressor.vercel.app/upscale-image-to-hd">AI HD upscale</a></nav>
     </div>
     <div class="strip" aria-label="Supported formats"><span>JPG</span><span>PNG</span><span>WebP</span><span>GIF</span><span>BMP</span><span>AVIF</span><span>SVG</span><span>HEIC</span><span>TIFF</span></div>
   </header>
@@ -344,6 +352,11 @@ td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-r
           <span>KB</span>
         </div>
         <p class="help" id="target-help"></p>
+      </div>
+      <div class="field">
+        <span class="lbl">AI enhance</span>
+        <label class="toggle" for="enhance"><input type="checkbox" id="enhance" aria-describedby="enhance-help"><span class="track" aria-hidden="true"></span><span>Make small or blurry photos sharp and Full HD</span></label>
+        <p class="help" id="enhance-help"></p>
       </div>
       <div class="field">
         <label class="lbl" for="fmt">Save as</label>
@@ -403,7 +416,7 @@ td:first-child { font: 500 13px/1.55 var(--mono); white-space: nowrap; padding-r
         <li><span>Each image is encoded at several quality levels, from high to low.</span></li>
         <li><span>Every attempt is decoded again and compared with the original using SSIM, the standard score for how alike two images look. On large images the check samples the most detailed and the smoothest parts, where compression damage shows first.</span></li>
         <li><span>The smallest file that still scores above the level you picked is kept. Balanced needs a 99.3% match and never drops below quality 80; Max needs 99.6% and never drops below 88.</span></li>
-        <li><span>If the result is not smaller than the original, you get the original back untouched. A file never comes out bigger unless you asked for a different format.</span></li>
+        <li><span>If the result is not smaller than the original, you get the original back untouched. A file never comes out bigger unless you asked for a different format or turned on AI enhance.</span></li>
       </ol>
     </div>
     <div>
@@ -581,6 +594,53 @@ function drawScaled(img, tw, th) {
   return out;
 }
 function hasAlphaPx(d) { for (var i = 3, n = d.length; i < n; i += 4) if (d[i] < 255) return true; return false; }
+
+/* ---- sharpness: variance of the Laplacian on luminance. Sharp photos score in the hundreds, soft ones far lower. ---- */
+function sharpnessOf(d, w, h) {
+  var step = (w * h > 3000000) ? 2 : 1, s = 0, ss = 0, n = 0;
+  function L(i) { return 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]; }
+  for (var y = 1; y < h - 1; y += step) {
+    for (var x = 1; x < w - 1; x += step) {
+      var i = (y * w + x) * 4;
+      var v = L(i - 4) + L(i + 4) + L(i - w * 4) + L(i + w * 4) - 4 * L(i);
+      s += v; ss += v * v; n++;
+    }
+  }
+  if (!n) return 1e9;
+  var m = s / n; return ss / n - m * m;
+}
+/* ---- unsharp mask with a separable box blur; small differences (noise) are left alone ---- */
+function sharpenData(d, w, h, amount, r) {
+  var n = w * h, a = new Float32Array(n * 3), b = new Float32Array(n * 3), win = 2 * r + 1, x, y, c, k;
+  for (y = 0; y < h; y++) {
+    for (c = 0; c < 3; c++) {
+      var sum = 0;
+      for (k = -r; k <= r; k++) sum += d[(y * w + Math.min(w - 1, Math.max(0, k))) * 4 + c];
+      for (x = 0; x < w; x++) {
+        a[(y * w + x) * 3 + c] = sum / win;
+        var outX = Math.max(0, x - r), inX = Math.min(w - 1, x + r + 1);
+        sum += d[(y * w + inX) * 4 + c] - d[(y * w + outX) * 4 + c];
+      }
+    }
+  }
+  for (x = 0; x < w; x++) {
+    for (c = 0; c < 3; c++) {
+      var s2 = 0;
+      for (k = -r; k <= r; k++) s2 += a[(Math.min(h - 1, Math.max(0, k)) * w + x) * 3 + c];
+      for (y = 0; y < h; y++) {
+        b[(y * w + x) * 3 + c] = s2 / win;
+        var outY = Math.max(0, y - r), inY = Math.min(h - 1, y + r + 1);
+        s2 += a[(inY * w + x) * 3 + c] - a[(outY * w + x) * 3 + c];
+      }
+    }
+  }
+  for (var i = 0; i < n; i++) {
+    for (c = 0; c < 3; c++) {
+      var p = i * 4 + c, diff = d[p] - b[i * 3 + c];
+      if (diff > 2 || diff < -2) d[p] = d[p] + amount * diff;
+    }
+  }
+}
 
 /* ---- SSIM on luminance (alpha composited over mid grey) ---- */
 function lumaRect(d, w, rx, ry, rw, rh) {
@@ -950,7 +1010,11 @@ async function processJob(job, onStage) {
   onStage('Opening');
   var bmp = job.bitmap || await decodeBlob(file);
   var w = bmp.width, h = bmp.height, notes = [], scale = 1, limited = false;
+  var upTo = st.enhance ? (st.maxSide || 1920) : 0;
   if (st.maxSide && Math.max(w, h) > st.maxSide) scale = st.maxSide / Math.max(w, h);
+  else if (upTo && (job.enhanced || job.aiFallback || job.plainUp) && Math.max(w, h) < upTo) scale = Math.min(upTo / Math.max(w, h), 4);
+  if (job.enhanced) notes.push('Enhanced with AI from ' + job.origW + '×' + job.origH + '.');
+  if (job.aiFallback) notes.push(job.aiSlow ? 'The AI was too slow on this device, so standard upscaling and sharpening were used.' : 'The AI enhancer could not load here, so standard upscaling was used.');
   if (w * h * scale * scale > job.limits.area) { scale = Math.sqrt(job.limits.area / (w * h)); limited = true; }
   if (Math.max(w, h) * scale > job.limits.side) { scale = job.limits.side / Math.max(w, h); limited = true; }
   var tw = Math.max(1, Math.round(w * scale)), th = Math.max(1, Math.round(h * scale)), resized = tw !== w || th !== h;
@@ -962,10 +1026,21 @@ async function processJob(job, onStage) {
 
   var data = null, alpha = false;
   if (kind !== 'jpeg') { data = c2d(src).getImageData(0, 0, tw, th); alpha = hasAlphaPx(data.data); }
+  if (st.enhance && !alpha && (!job.enhanced || scale > 1.3)) {
+    var sd = data || c2d(src).getImageData(0, 0, tw, th), sharp = sharpnessOf(sd.data, tw, th);
+    if (sharp < 150) {
+      onStage('Sharpening a soft photo');
+      sharpenData(sd.data, tw, th, sharp < 40 ? 0.9 : 0.55, sharp < 40 ? 2 : 1);
+      c2d(src).putImageData(sd, 0, 0);
+      if (data) data = sd;
+      if (!job.enhanced) notes.push('This photo was soft, so it was sharpened.');
+      job.sharpened = true;
+    }
+  }
   var webp = await canWebp();
   if (st.targetKB > 0) {
     var target = Math.round(st.targetKB * 1000), tLabel = sizeLabel(st.targetKB);
-    if (file.size <= target && !resized && (kind === 'jpeg' || kind === 'png' || kind === 'webp')) {
+    if (file.size <= target && !resized && !job.enhanced && !job.aiFallback && !job.sharpened && (kind === 'jpeg' || kind === 'png' || kind === 'webp')) {
       var thumbK = await makeThumb(src, alpha, webp);
       return { status: 'kept', reason: 'Already under ' + tLabel + ', so the original is returned untouched.', thumb: thumbK, width: w, height: h, crc: crc32(new Uint8Array(await file.arrayBuffer())) };
     }
@@ -980,7 +1055,7 @@ async function processJob(job, onStage) {
     return {
       status: 'done', blob: fit.blob, mime: tmime, ext: tfmt === 'jpeg' ? 'jpg' : tfmt,
       label: label2(tmime) + ' · quality ' + Math.round(fit.q * 100) + ' · under ' + tLabel,
-      q: fit.q, ssim: sim, lossless: false, width: fw, height: fh, origW: w, origH: h,
+      q: fit.q, ssim: sim, lossless: false, width: fw, height: fh, origW: job.origW || w, origH: job.origH || h, enhanced: !!job.enhanced, sharpened: !!job.sharpened,
       notes: notes, thumb: thumbT, crc: crc32(new Uint8Array(await fit.blob.arrayBuffer()))
     };
   }
@@ -1019,18 +1094,18 @@ async function processJob(job, onStage) {
   var thumb = await makeThumb(src, alpha, webp);
   var photoPng = kind === 'png' && !alpha && fmts.length === 1 && fmts[0] === 'png' && best.lossless && !/colors/.test(best.label);
   var photoTip = 'Tip: photos saved as PNG shrink far more as JPG or WebP. Choose "Smallest file" under Save as.';
-  if (mayKeep && !resized && best.blob.size >= file.size * 0.98) {
+  if (mayKeep && !resized && !job.sharpened && !job.enhanced && !job.aiFallback && best.blob.size >= file.size * 0.98) {
     return { status: 'kept', reason: 'Already well compressed, so the original is returned untouched.' + (photoPng ? ' ' + photoTip : ''), thumb: thumb, width: w, height: h, crc: crc32(new Uint8Array(await file.arrayBuffer())) };
   }
   if (photoPng) notes.push(photoTip);
   if (outFmt === 'jpeg' && alpha) notes.push('Transparent areas were filled with white, because JPG has no transparency.');
-  if (best.blob.size >= file.size) notes.push(
+  if (best.blob.size >= file.size && !job.enhanced && !job.aiFallback && !job.sharpened) notes.push(
     kind === 'heic' ? 'HEIC is already very compact, so the ' + label2(best.mime) + ' is larger, but it now opens everywhere. Pick a Resize size for a smaller file.'
     : CONVERT[kind] ? 'Converted so it opens everywhere.'
     : 'Bigger than the original. Choose "Same format as the original" to keep originals that cannot shrink.');
   return {
     status: 'done', blob: best.blob, mime: best.mime, ext: outFmt === 'jpeg' ? 'jpg' : outFmt, label: best.label,
-    q: best.q, ssim: best.ssim, lossless: !!best.lossless, width: tw, height: th, origW: w, origH: h,
+    q: best.q, ssim: best.ssim, lossless: !!best.lossless, width: tw, height: th, origW: job.origW || w, origH: job.origH || h, enhanced: !!job.enhanced, sharpened: !!job.sharpened,
     notes: notes, thumb: thumb, crc: crc32(new Uint8Array(await best.blob.arrayBuffer()))
   };
 }
@@ -1119,11 +1194,13 @@ self.onmessage = async function (ev) {
       quality: +$('#q').value,
       format: $('#fmt').value,
       maxSide: +$('#resize').value || 0,
-      targetKB: targetKB
+      targetKB: targetKB,
+      enhance: $('#enhance').checked
     };
   }
   /* Size pages preset their target with <html data-target-kb>; the target itself is never remembered between visits. */
   function applyPresetTarget() {
+    if (document.documentElement.getAttribute('data-enhance') === '1') $('#enhance').checked = true;
     var kb = +(document.documentElement.getAttribute('data-target-kb') || 0);
     if (!kb) return;
     var opt = $('#target').querySelector('option[value="' + kb + '"]');
@@ -1146,6 +1223,9 @@ self.onmessage = async function (ev) {
     $('#target-help').textContent = s.targetKB > 0
       ? 'Every image comes out under ' + (s.targetKB >= 1000 ? (Math.round(s.targetKB / 100) / 10) + ' MB' : s.targetKB + ' KB') + ' as a JPG, as large and sharp as that size allows. Quality settings are chosen automatically. Use this for forms and uploads with a size limit.'
       : 'Choose a limit when a form or website only accepts files up to a certain size.';
+    $('#enhance-help').textContent = s.enhance
+      ? 'Photos smaller than ' + (s.maxSide || 1920) + ' px are enlarged with AI (ESRGAN) and made Full HD; soft photos are sharpened. The AI downloads once (about 3 MB) and runs on your device, so it can take a few seconds per photo. It cannot recover detail that was never captured, so faces and text can look slightly smoothed.'
+      : 'Off: images are only compressed. Turn on to enlarge small photos with AI and sharpen blurry ones.';
     $('#resize-help').textContent = s.maxSide
       ? 'Phone photos are about 4000 px wide; screens show about 1920. Fitting to ' + s.maxSide + ' px is what turns MB into KB, with no visible difference on screen. Smaller images are never enlarged.'
       : 'Full resolution is kept, so phone photos usually stay in MB. Best for printing.';
@@ -1160,8 +1240,8 @@ self.onmessage = async function (ev) {
   $('#settings').addEventListener('input', onSettings);
   $('#settings').addEventListener('change', onSettings);
   function onSettings() {
-    syncForm();
-    try { var keep = readSettings(); delete keep.targetKB; localStorage.setItem(SETTINGS_KEY, JSON.stringify(keep)); } catch (e) {}
+    syncForm(); aiPreload();
+    try { var keep = readSettings(); delete keep.targetKB; delete keep.enhance; localStorage.setItem(SETTINGS_KEY, JSON.stringify(keep)); } catch (e) {}
     refreshApply();
   }
   function refreshApply() {
@@ -1241,17 +1321,24 @@ self.onmessage = async function (ev) {
     if (n >= RETRY_AREAS.length) return false;
     it.retries = n + 1; it.retryArea = RETRY_AREAS[n];
     if (it.bitmap && it.bitmap.close) it.bitmap.close();
-    it.bitmap = null; it.triedMain = false; it.status = 'queued'; it.stage = '';
+    it.bitmap = null; it.triedMain = false; it.prepped = false; it.status = 'queued'; it.stage = '';
     updateCard(it); enqueue(it); scheduleSummary();
     return true;
   }
   function currentJob(it) {
     var st = readSettings();
     it.usedKey = JSON.stringify(st);
-    return { id: it.id, file: it.file, kind: it.kind, settings: st, limits: { area: Math.min(LIMITS.area, it.retryArea || Infinity), side: LIMITS.side } };
+    return {
+      id: it.id, file: it.file, kind: it.kind, settings: st, limits: { area: Math.min(LIMITS.area, it.retryArea || Infinity), side: LIMITS.side },
+      enhanced: !!it.enhanced, aiFallback: !!it.aiFallback, aiSlow: !!it.aiSlow, plainUp: !!it.plainUp, origW: it.origW, origH: it.origH
+    };
+  }
+  function needsPrep(it) {
+    if (it.bitmap || it.prepped) return false;
+    return !!NEEDS_PREP[it.kind] || (it.kind !== 'svg' && $('#enhance').checked);
   }
   function enqueue(it) {
-    if (NEEDS_PREP[it.kind] && !it.bitmap) S.pq.push(it.id);
+    if (needsPrep(it)) S.pq.push(it.id);
     else if (it.kind === 'svg' || !POOL.ok) S.mq.push(it.id); else S.wq.push(it.id);
   }
   function takeNext(q) {
@@ -1273,15 +1360,97 @@ self.onmessage = async function (ev) {
   function runPrep(it) {
     S.prepBusy = true; it.status = 'working'; it.stage = 'Opening ' + (KIND_LABEL[it.kind] || 'image'); updateCard(it);
     var gen = it.gen;
-    decodeAny(it.file, it.kind, function (s) { if (it.gen === gen) { it.stage = s; updateStage(it); } }).then(function (b) {
-      if (S.items.get(it.id) !== it || it.gen !== gen) { if (b && b.close) b.close(); return; }
-      it.bitmap = b; it.status = 'queued';
+    prepItem(it, function (s) { if (it.gen === gen) { it.stage = s; updateStage(it); } }).then(function (res) {
+      if (S.items.get(it.id) !== it || it.gen !== gen) { if (res.bitmap && res.bitmap.close) res.bitmap.close(); return; }
+      it.prepped = true; it.bitmap = res.bitmap || null;
+      it.enhanced = !!res.enhanced; it.aiFallback = !!res.aiFallback; it.aiSlow = !!res.aiSlow; it.plainUp = !!res.plainUp; it.origW = res.origW; it.origH = res.origH;
+      it.status = 'queued';
       if (POOL.ok) S.wq.unshift(it.id); else S.mq.unshift(it.id);
     }, function (e) {
       if (S.items.get(it.id) !== it || it.gen !== gen) return;
       if (isMemoryError(e && e.code, e && e.message)) { if (!retrySmaller(it)) failItem(it, MEMORY_MSG); }
       else failItem(it, decodeMessage(it.kind, e));
     }).then(function () { S.prepBusy = false; setTimeout(pump, 0); });
+  }
+  /* Opens the image on the page and, with AI enhance on, enlarges small photos with the ESRGAN model. */
+  async function prepItem(it, onStage) {
+    var st = readSettings(), enhance = st.enhance && it.kind !== 'svg';
+    if (!NEEDS_PREP[it.kind] && (it.kind === 'gif' || it.kind === 'png' || it.kind === 'webp') && await isAnimated(it.file, it.kind)) return { bitmap: null };
+    var b = await decodeAny(it.file, it.kind, onStage);
+    if (!enhance) return { bitmap: b };
+    var to = st.maxSide || 1920, side = Math.max(b.width, b.height);
+    if (side >= to * 0.9 || Math.min(b.width, b.height) < 48 || bitmapHasAlpha(b)) return { bitmap: b };
+    if (side >= Math.min(1280, to * 0.67)) return { bitmap: b, plainUp: true };
+    try {
+      var up = await aiUpscale(b, onStage);
+      var res = { bitmap: up, enhanced: true, origW: b.width, origH: b.height };
+      if (b.close) b.close();
+      return res;
+    } catch (e) {
+      if (window.console) console.warn('AI enhance unavailable:', e);
+      return { bitmap: b, aiFallback: true, aiSlow: !!(e && e.aiSlow) };
+    }
+  }
+  function bitmapHasAlpha(b) {
+    var c = document.createElement('canvas'); c.width = b.width; c.height = b.height;
+    var x = c.getContext('2d'); x.drawImage(b, 0, 0);
+    return hasAlphaPx(x.getImageData(0, 0, b.width, b.height).data);
+  }
+
+  /* ---------- AI enhance: TensorFlow.js + UpscalerJS (ESRGAN Slim), downloaded only when first used ---------- */
+  var AI_LIB = {
+    tf: 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js',
+    up: 'https://cdn.jsdelivr.net/npm/upscaler@1.0.0/dist/browser/umd/upscaler.min.js',
+    x2: 'https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-slim@1.0.0/dist/umd/models/esrgan-slim/src/x2/index.min.js'
+  };
+  function aiBase() {
+    return once('aiBase', function () {
+      return loadScript(AI_LIB.tf).then(function () { return loadScript(AI_LIB.x2); }).then(function () {
+        if (!window.tf || !window.ESRGANSlim2x) throw libErr();
+        if (!window.DefaultUpscalerJSModel) window.DefaultUpscalerJSModel = window.ESRGANSlim2x;
+        return loadScript(AI_LIB.up);
+      }).then(function () { if (typeof window.Upscaler !== 'function') throw libErr(); });
+    });
+  }
+  var AI_PATCH = { patchSize: 128, padding: 8 }, AI_TIME_LIMIT = 60000;
+  function aiUpscaler() {
+    return once('ai2', function () {
+      return aiBase().then(function () {
+        if (!window.ESRGANSlim2x) throw libErr();
+        var up = new window.Upscaler({ model: window.ESRGANSlim2x });
+        return Promise.resolve(up.getModel ? up.getModel() : null).then(function () { return up; });
+      });
+    });
+  }
+  /* Downloads the AI model and prepares it while the visitor is still choosing photos. */
+  function aiPreload() {
+    if (!$('#enhance').checked || S.aiPreloaded) return;
+    S.aiPreloaded = true;
+    aiUpscaler().then(function (up) { if (up.warmup) return up.warmup([AI_PATCH]); }).catch(function () {});
+  }
+  async function aiUpscale(bitmap, onStage) {
+    onStage('Loading the AI enhancer');
+    var up = await aiUpscaler(), tf = window.tf;
+    var input = tf.browser.fromPixels(bitmap);
+    var ctl = window.AbortController ? new AbortController() : null, slow = false;
+    var timer = setTimeout(function () { slow = true; if (ctl) ctl.abort(); try { if (up.abort) up.abort(); } catch (e) {} }, AI_TIME_LIMIT);
+    try {
+      onStage('Enhancing with AI');
+      await new Promise(function (r) { setTimeout(r, 40); });
+      var out;
+      try {
+        out = await up.upscale(input, {
+          output: 'tensor', patchSize: AI_PATCH.patchSize, padding: AI_PATCH.padding, awaitNextFrame: false, signal: ctl ? ctl.signal : undefined,
+          progress: function (p) { onStage('Enhancing with AI ' + Math.round(p * 100) + '%'); }
+        });
+      } catch (e) { if (slow) { var se = new Error('AI too slow'); se.aiSlow = true; throw se; } throw e; }
+      if (slow) { try { out.dispose(); } catch (e) {} var se2 = new Error('AI too slow'); se2.aiSlow = true; throw se2; }
+      var t = tf.tidy(function () { var o = out.shape.length === 4 ? out.squeeze([0]) : out; return tf.clipByValue(o, 0, 255).cast('int32'); });
+      out.dispose();
+      var shp = t.shape, px = await tf.browser.toPixels(t);
+      t.dispose();
+      return await createImageBitmap(new ImageData(px, shp[1], shp[0]));
+    } finally { clearTimeout(timer); input.dispose(); }
   }
   function runOnWorker(slot, it) {
     it.status = 'working'; it.stage = 'Starting'; updateCard(it);
@@ -1504,6 +1673,7 @@ self.onmessage = async function (ev) {
   }
   function resetItem(it) {
     it.gen++; it.status = 'queued'; it.result = null; it.stage = ''; it.triedMain = false; it.error = null;
+    it.prepped = false; it.enhanced = false; it.aiFallback = false; it.aiSlow = false; it.plainUp = false; it.origW = it.origH = undefined;
     if (it.bitmap && it.bitmap.close) it.bitmap.close();
     it.bitmap = null;
     if (it.thumbUrl) { URL.revokeObjectURL(it.thumbUrl); it.thumbUrl = null; }
@@ -1559,7 +1729,8 @@ self.onmessage = async function (ev) {
     el = el || it.el; if (!el) return;
     var r = it.result;
     el.dataset.status = it.status;
-    el.querySelector('.chip').textContent = (it.example ? 'Example · ' : '') + (it.status === 'done' && it.outSize > it.origSize ? 'Converted' : CHIP[it.status]);
+    el.dataset.enhanced = r && r.status === 'done' && (r.enhanced || r.sharpened) ? '1' : '0';
+    el.querySelector('.chip').textContent = (it.example ? 'Example · ' : '') + (it.status === 'done' && r && r.enhanced ? 'AI enhanced' : it.status === 'done' && r && r.sharpened ? 'Sharpened' : it.status === 'done' && it.outSize > it.origSize ? 'Converted' : CHIP[it.status]);
     var src = KIND_LABEL[it.kind] || 'IMG', out = src;
     if (r && r.status === 'done') out = r.mime === 'image/svg+xml' ? 'SVG' : label2(r.mime);
     el.querySelector('.fmt').textContent = it.status === 'done' && out !== src ? src + ' → ' + out : src;
@@ -1588,8 +1759,9 @@ self.onmessage = async function (ev) {
       sizes.innerHTML = '<span class="from"></span><span aria-hidden="true">→</span><span class="to"></span><span class="pct"></span>';
       sizes.querySelector('.from').textContent = fmtBytes(it.origSize);
       sizes.querySelector('.to').textContent = fmtBytes(it.outSize);
-      sizes.querySelector('.pct').textContent = it.status === 'done' ? (pct > 0 ? '−' + pct + '%' : (pct < 0 ? '+' + (-pct) + '%' : '0%')) : '0%';
-      sizes.querySelector('.pct').classList.toggle('up', it.status === 'done' && pct < 0);
+      var hd = it.status === 'done' && r && (r.enhanced || r.sharpened) && pct < 0;
+      sizes.querySelector('.pct').textContent = hd ? (Math.max(r.width, r.height) >= 1900 ? 'Full HD' : 'HD') : it.status === 'done' ? (pct > 0 ? '−' + pct + '%' : (pct < 0 ? '+' + (-pct) + '%' : '0%')) : '0%';
+      sizes.querySelector('.pct').classList.toggle('up', it.status === 'done' && pct < 0 && !hd);
       var parts = [];
       if (r.status === 'done') {
         parts.push(r.label);
@@ -1957,7 +2129,7 @@ self.onmessage = async function (ev) {
   /* ---------- start ---------- */
   summary();
   initPool().then(function () {
-    S.ready = true;
+    S.ready = true; setTimeout(aiPreload, 1200);
     if (POOL.ok) {
       var keepMain = [];
       S.mq.forEach(function (id) { var it = S.items.get(id); if (it && it.kind !== 'svg') S.wq.push(id); else keepMain.push(id); });
